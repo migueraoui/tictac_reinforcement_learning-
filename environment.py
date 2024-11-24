@@ -2,7 +2,7 @@ import numpy as np
 
 class TicTacToeEnv:
 
-    def __init__(env):
+ def __init__(env):
         env.board = np.zeros((3, 3), dtype=int)  # initialize an empty board
         env.winner = None  
         env.current_player = 1  #player 1 starts the game
@@ -52,4 +52,3 @@ class TicTacToeEnv:
         
         env.current_player = -env.current_player 
         return env.board, 0  
-
