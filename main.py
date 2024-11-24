@@ -6,16 +6,16 @@ class TicTacToeAgent:
         self.epsilon = epsilon
         self.alpha = alpha
         self.gamma = gamma
-        self.q_table = {}  # Q-table to store Q-values for state-action pairs
+        self.q_table = {}  # q-table to store q_values for state action pairs
 
     def _get_state_key(self, board):
         return tuple(map(tuple, board))  # Convert board state to a hashable tuple
 
     def choose_action(self, board, possible_actions):
         state_key = self._get_state_key(board)
-        if random.random() < self.epsilon:  # Explore: choose a random action
+        if random.random() < self.epsilon:  # choose a random action
             return random.choice(possible_actions)
-        else:  # Exploit: choose the best action based on Q-table
+        else:  # choose the best action based on Q-table
             if state_key not in self.q_table:
                 self.q_table[state_key] = {action: 0 for action in possible_actions}
             return max(self.q_table[state_key], key=self.q_table[state_key].get)
@@ -30,12 +30,12 @@ class TicTacToeAgent:
         if next_state_key not in self.q_table:
             self.q_table[next_state_key] = {action: 0 for action in possible_actions}
 
-        # Get current Q-value
+        # Get current Q value
         old_q_value = self.q_table[state_key].get(action, 0)
         # Get the maximum Q-value for the next state
         future_q_value = max(self.q_table[next_state_key].values(), default=0)
 
-        # Update Q-value using Q-learning formula
+        # Update Q-value using q learning formula
         new_q_value = old_q_value + self.alpha * (reward + self.gamma * future_q_value - old_q_value)
         self.q_table[state_key][action] = new_q_value
 
@@ -43,7 +43,7 @@ class TicTacToeEnv:
     def __init__(self):
         self.board = np.zeros((3, 3), dtype=int)  # Initialize empty board
         self.winner = None
-        self.current_player = 1  # Player 1 starts
+        self.current_player = 1  # Player 1 start
 
     def reset(self):
         self.board = np.zeros((3, 3), dtype=int)
@@ -72,20 +72,20 @@ class TicTacToeEnv:
 
     def move(self, action, player):
         row, column = action
-        if self.board[row, column] != 0:  # Invalid move
+        if self.board[row, column] != 0:  # Invalid Move
             return self.board, -10
 
         self.board[row, column] = player
-        if self.check_winner():  # Check if the move resulted in a win
+        if self.check_winner():  # chk if the move resulted in a win
             return self.board, 1
-        elif self.is_full():  # Check if the board is full
+        elif self.is_full():  #check if the board is full
             return self.board, 0
 
         self.current_player = -self.current_player  # Switch player
         return self.board, 0
 
 def train_agents(agent1, agent2, env, episodes=10000):
-    print_interval = 1000  # Interval to print progress
+    print_interval = 1000  
 
     for episode in range(episodes):
         env.reset()
@@ -104,7 +104,7 @@ def train_agents(agent1, agent2, env, episodes=10000):
             moves.append((env.current_player, action))
 
             if reward != 0 or env.is_full():
-                if episode < 5 or episode >= episodes - 5:  # Print first and last 5 episodes
+                if episode < 5 or episode >= episodes - 5:  #print first and last 5 episodes
                     print(f"Episode {episode + 1}:")
                     print("Final Board:")
                     print(env.board)
@@ -121,11 +121,10 @@ def train_agents(agent1, agent2, env, episodes=10000):
 
     print("Training complete!")
 
-if __name__ == "__main__":
-    env = TicTacToeEnv()
-    agent1 = TicTacToeAgent(epsilon=0.1, alpha=0.5, gamma=0.9)
-    agent2 = TicTacToeAgent(epsilon=0.1, alpha=0.5, gamma=0.9)
+env = TicTacToeEnv()
+agent1 = TicTacToeAgent(epsilon=0.1, alpha=0.5, gamma=0.9)
+agent2 = TicTacToeAgent(epsilon=0.1, alpha=0.5, gamma=0.9)
 
-    print("Training agents...")
-    train_agents(agent1, agent2, env, episodes=10000)
+print("Training agents...")
+train_agents(agent1, agent2, env, episodes=10000)
 # create one agent play
