@@ -4,12 +4,11 @@ import random
 class TicTacToeAgent:
     def __init__(self, epsilon=0.1, alpha=0.5, gamma=0.9):
         self.q_table = {}
-        self.epsilon = epsilon  # Exploration rate
-        self.alpha = alpha      # Learning rate
-        self.gamma = gamma      # Discount factor
+        self.epsilon = epsilon  
+        self.alpha = alpha      
+        self.gamma = gamma      
 
     def get_state_key(self, board):
-        """Convert the board to a tuple key for Q-table."""
         return tuple(board.flatten())
 
     def choose_action(self, board, possible_actions):
@@ -17,7 +16,6 @@ class TicTacToeAgent:
         state_key = self.get_state_key(board)
         if random.uniform(0, 1) < self.epsilon or state_key not in self.q_table:
             return random.choice(possible_actions)
-        # Exploit: Choose the action with the highest Q-value
         q_values = self.q_table[state_key]
         return max(q_values, key=q_values.get)
 
